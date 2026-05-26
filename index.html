@@ -3,135 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metrónomo Pro</title>
+    <title>MusikApp Pro</title>
     <style>
+        /* Diseño Base Estilo App */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #121214;
             color: #e1e1e6;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Contenedor Principal de las Pantallas */
+        .content-wrapper {
+            flex: 1;
+            padding: 20px;
+            padding-bottom: 80px; /* Espacio para que el menú de abajo no tape nada */
+            display: flex;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            align-items: flex-start;
         }
-        .container {
-            text-align: center;
+
+        .screen {
+            display: none; /* Escondemos las pantallas por defecto */
+            width: 100%;
+            max-width: 380px;
             background-color: #202024;
-            padding: 35px;
+            padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            width: 85%;
-            max-width: 360px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
         }
-        h1 { margin: 0 0 10px 0; color: #00b37e; font-size: 1.6rem; }
-        
-        /* Controles de Compás */
-        .time-signature {
-            margin-bottom: 20px;
+
+        /* Pantalla Activa */
+        .screen.active {
+            display: block;
         }
-        select {
+
+        h1 { margin: 0 0 15px 0; color: #00b37e; font-size: 1.5rem; }
+
+        /* --- ESTILOS DEL METRÓNOMO --- */
+        .time-signature { margin-bottom: 15px; }
+        select, input[type="text"] {
             background: #121214;
             color: white;
             border: 1px solid #29292e;
-            padding: 8px 15px;
+            padding: 10px;
             border-radius: 8px;
             font-size: 1rem;
         }
-
-        /* Pantalla de BPM y botones +/- */
         .bpm-controls {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 20px;
-            margin: 20px 0;
+            margin: 15px 0;
         }
         .btn-tempo {
             background: #29292e;
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            font-size: 1.4rem;
             border-radius: 50%;
             cursor: pointer;
         }
         .btn-tempo:active { background: #00b37e; }
-        .bpm-display { font-size: 4.5rem; font-weight: bold; color: #ffffff; min-width: 120px; }
-        
-        .slider { width: 100%; margin: 20px 0; accent-color: #00b37e; }
-        
-        /* Botón Principal */
+        .bpm-display { font-size: 4rem; font-weight: bold; color: #ffffff; min-width: 100px; }
+        .slider { width: 100%; margin: 15px 0; accent-color: #00b37e; }
         .btn-main {
             background-color: #00b37e;
             color: white;
             border: none;
-            padding: 18px;
+            padding: 15px;
             width: 100%;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(0, 179, 126, 0.3);
         }
-        .btn-main.playing { background-color: #f75a68; box-shadow: 0 4px 12px rgba(247, 90, 104, 0.3); }
-        
-        /* Visualizador de ritmo */
-        .visualizer {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 25px;
-            height: 15px;
-        }
-        .dot {
-            width: 15px;
-            height: 15px;
-            background-color: #29292e;
-            border-radius: 50%;
-            transition: background 0.1s;
-        }
+        .btn-main.playing { background-color: #f75a68; }
+        .visualizer { display: flex; justify-content: center; gap: 8px; margin-top: 20px; height: 12px; }
+        .dot { width: 12px; height: 12px; background-color: #29292e; border-radius: 50%; transition: transform 0.1s; }
         .dot.active { background-color: #00b37e; transform: scale(1.2); }
         .dot.accent { background-color: #ffcd1e; }
+
+        /* --- ESTILOS DEL BUSCADOR --- */
+        .search-box { display: flex; gap: 10px; margin-top: 15px; }
+        .search-box input { flex: 1; }
+        .btn-search {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .video-container { margin-top: 20px; width: 100%; display: none; }
+        iframe { width: 100%; height: 200px; border-radius: 12px; border: none; }
+
+        /* --- ESTILOS DE TEORÍA --- */
+        .theory-card {
+            background: #121214;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 15px;
+            border-left: 4px solid #00b37e;
+        }
+        .theory-card h3 { margin: 0 0 5px 0; color: #ffffff; font-size: 1.1rem; }
+        .theory-card p { margin: 0; color: #8b8b92; font-size: 0.9rem; }
+
+        /* --- BARRA DE NAVEGACIÓN FIJA ABAJO --- */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background-color: #202024;
+            border-top: 1px solid #29292e;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #8b8b92;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            height: 100%;
+            justify-content: center;
+        }
+        /* Estilo cuando la pestaña está seleccionada */
+        .nav-item.active {
+            color: #00b37e;
+        }
+        .nav-item icon {
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Metrónomo Pro</h1>
-        
-        <div class="time-signature">
-            <label for="beatsSelect">Compás: </label>
-            <select id="beatsSelect">
-                <option value="4">4 / 4</option>
-                <option value="3">3 / 4</option>
-                <option value="2">2 / 4</option>
-                <option value="6">6 / 8</option>
-            </select>
+    <div class="content-wrapper">
+
+        <div id="screen-metronome" class="screen active">
+            <h1>Metrónomo Pro</h1>
+            <div class="time-signature">
+                <label for="beatsSelect">Compás: </label>
+                <select id="beatsSelect">
+                    <option value="4">4 / 4</option>
+                    <option value="3">3 / 4</option>
+                    <option value="2">2 / 4</option>
+                    <option value="6">6 / 8</option>
+                </select>
+            </div>
+            <div class="bpm-controls">
+                <button class="btn-tempo" id="minusBtn">-</button>
+                <div class="bpm-display" id="bpmValue">120</div>
+                <button class="btn-tempo" id="plusBtn">+</button>
+            </div>
+            <input type="range" min="40" max="250" value="120" class="slider" id="bpmSlider">
+            <button class="btn-main" id="playBtn">Comenzar</button>
+            <div class="visualizer" id="visualizer"></div>
         </div>
 
-        <div class="bpm-controls">
-            <button class="btn-tempo" id="minusBtn">-</button>
-            <div class="bpm-display" id="bpmValue">120</div>
-            <button class="btn-tempo" id="plusBtn">+</button>
+        <div id="screen-scores" class="screen">
+            <h1>Buscador de Partituras</h1>
+            <p style="font-size: 0.9rem; color: #8b8b92; margin-bottom: 15px;">Filtra automáticamente videos con partitura visual.</p>
+            <div class="search-box">
+                <input type="text" id="searchQuery" placeholder="Ej: Mozart, Anime, Rock...">
+                <button class="btn-search" id="searchBtn">Buscar</button>
+            </div>
+            <div class="video-container" id="videoContainer">
+                <iframe id="youtubePlayer" src="" allowfullscreen></iframe>
+            </div>
         </div>
-        
-        <input type="range" min="40" max="250" value="120" class="slider" id="bpmSlider">
-        
-        <button class="btn-main" id="playBtn">Comenzar</button>
 
-        <div class="visualizer" id="visualizer"></div>
+        <div id="screen-theory" class="screen">
+            <h1>Teoría Musical</h1>
+            <p style="font-size: 0.9rem; color: #8b8b92;">Tus apuntes de consulta rápida.</p>
+            
+            <div class="theory-card">
+                <h3>El Compás de 4/4</h3>
+                <p>Entran 4 negras por cada compás. Es el ritmo más común en el pop, rock y música moderna.</p>
+            </div>
+
+            <div class="theory-card">
+                <h3>¿Qué es el BPM?</h3>
+                <p>Significa "Beats Per Minute" (Pulsaciones por minuto). Cuanto más alto sea el número, más rápido irá la música.</p>
+            </div>
+            
+            <p style="font-size: 0.8rem; color: #55555d; margin-top: 20px;">Próximamente añadiremos escalas y acordes...</p>
+        </div>
+
     </div>
 
+    <nav class="nav-bar">
+        <button class="nav-item active" onclick="switchTab('metronome')">
+            <icon>⏱</icon>
+            <span>Metrónomo</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('scores')">
+            <icon>🔍</icon>
+            <span>Partituras</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('theory')">
+            <icon>📖</icon>
+            <span>Teoría</span>
+        </button>
+    </nav>
+
     <script>
+        // --- SISTEMA DE PESTAÑAS (CAMBIO DE APARTADO) ---
+        function switchTab(tabName) {
+            // Desactivar todas las pantallas y botones del menú
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            
+            // Activar la pantalla elegida y su botón correspondiente
+            document.getElementById(`screen-${tabName}`).classList.add('active');
+            
+            // Buscar cuál botón del menú se pulsó para marcarlo como verde
+            const btnIndex = tabName === 'metronome' ? 0 : tabName === 'scores' ? 1 : 2;
+            document.querySelectorAll('.nav-item')[btnIndex].classList.add('active');
+        }
+
+        // --- MOTOR DEL METRÓNOMO ---
         let audioCtx = null;
         let isPlaying = false;
         let expected = 0;
         let timeoutId = null;
-        
         let bpm = 120;
         let beatsPerMeasure = 4;
         let currentBeat = 0;
@@ -144,7 +262,6 @@
         const beatsSelect = document.getElementById('beatsSelect');
         const visualizer = document.getElementById('visualizer');
 
-        // Crear los puntitos visuales según el compás
         function createVisuals() {
             visualizer.innerHTML = '';
             for (let i = 0; i < beatsPerMeasure; i++) {
@@ -156,89 +273,86 @@
         createVisuals();
 
         function updateBpm(value) {
-            bpm = Math.max(40, Math.min(250, value)); // Límites
+            bpm = Math.max(40, Math.min(250, value));
             bpmSlider.value = bpm;
             bpmValue.textContent = bpm;
         }
 
-        // Eventos de control de velocidad
         bpmSlider.addEventListener('input', (e) => updateBpm(e.target.value));
         plusBtn.addEventListener('click', () => updateBpm(parseInt(bpm) + 1));
         minusBtn.addEventListener('click', () => updateBpm(parseInt(bpm) - 1));
-        
         beatsSelect.addEventListener('change', (e) => {
             beatsPerMeasure = parseInt(e.target.value);
             createVisuals();
             currentBeat = 0;
         });
 
-        // El motor del sonido (Genera el Clic)
         function playClick(isAccent) {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
-            
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-            
-            // Si es el primer tiempo, suena más agudo (Acento estilo SoundCorset)
             osc.frequency.value = isAccent ? 1200 : 800; 
-            
             gain.gain.setValueAtTime(isAccent ? 0.8 : 0.4, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-            
             osc.start(audioCtx.currentTime);
             osc.stop(audioCtx.currentTime + 0.04);
         }
 
-        // Bucle ultra-preciso para que no se desfase
         function scheduler() {
             while (audioCtx && audioCtx.currentTime >= expected - 0.02) {
                 let isAccent = (currentBeat === 0);
                 playClick(isAccent);
-                
-                // Actualizar luces
                 const dots = visualizer.children;
                 if(dots.length > 0) {
                     for(let i=0; i<dots.length; i++) dots[i].className = 'dot';
                     dots[currentBeat].classList.add('active');
                     if(currentBeat === 0) dots[currentBeat].classList.add('accent');
                 }
-
-                // Avanzar tiempo
                 let interval = 60.0 / bpm;
-                if (beatsPerMeasure === 6) interval = 30.0 / bpm; // Ajuste rápido para 6/8
+                if (beatsPerMeasure === 6) interval = 30.0 / bpm;
                 expected += interval;
                 currentBeat = (currentBeat + 1) % beatsPerMeasure;
             }
             timeoutId = setTimeout(scheduler, 25);
         }
 
-        function start() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            isPlaying = true;
-            playBtn.textContent = 'Detener';
-            playBtn.classList.add('playing');
-            currentBeat = 0;
-            expected = audioCtx.currentTime + 0.05;
-            scheduler();
-        }
-
-        function stop() {
-            isPlaying = false;
-            playBtn.textContent = 'Comenzar';
-            playBtn.classList.remove('playing');
-            clearTimeout(timeoutId);
-            // Apagar luces al frenar
-            const dots = visualizer.children;
-            for(let i=0; i<dots.length; i++) dots[i].className = 'dot';
-        }
-
         playBtn.addEventListener('click', () => {
-            if (isPlaying) stop(); else start();
+            if (isPlaying) {
+                isPlaying = false;
+                playBtn.textContent = 'Comenzar';
+                playBtn.classList.remove('playing');
+                clearTimeout(timeoutId);
+                const dots = visualizer.children;
+                for(let i=0; i<dots.length; i++) dots[i].className = 'dot';
+            } else {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                isPlaying = true;
+                playBtn.textContent = 'Detener';
+                playBtn.classList.add('playing');
+                currentBeat = 0;
+                expected = audioCtx.currentTime + 0.05;
+                scheduler();
+            }
+        });
+
+        // --- BUSCADOR DE YOUTUBE ---
+        const searchBtn = document.getElementById('searchBtn');
+        const searchQuery = document.getElementById('searchQuery');
+        const videoContainer = document.getElementById('videoContainer');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+
+        searchBtn.addEventListener('click', () => {
+            const userText = searchQuery.value.trim();
+            if (userText === "") return;
+            const filtroObligatorio = "partitura sheet music";
+            const busquedaCompleta = encodeURIComponent(userText + " " + filtroObligatorio);
+            youtubePlayer.src = `https://www.youtube.com/embed?listType=search&list=${busquedaCompleta}`;
+            videoContainer.style.display = "block";
         });
     </script>
 </body>
 </html>
 
+        
