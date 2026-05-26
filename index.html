@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusikApp Pro</title>
+    <title>MusikApp Melancholy</title>
     <style>
-        /* Diseño Base Estilo App */
+        /* Diseño Base Estilo App - Tonos Tristes y Azules */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #121214;
-            color: #e1e1e6;
+            background-color: #0f141c; /* Fondo azul oscuro muy profundo */
+            color: #b0c4de; /* Texto azul grisáceo claro */
             margin: 0;
             padding: 0;
             display: flex;
@@ -22,21 +22,22 @@
         .content-wrapper {
             flex: 1;
             padding: 20px;
-            padding-bottom: 80px; /* Espacio para que el menú de abajo no tape nada */
+            padding-bottom: 80px; 
             display: flex;
             justify-content: center;
             align-items: flex-start;
         }
 
         .screen {
-            display: none; /* Escondemos las pantallas por defecto */
+            display: none; 
             width: 100%;
             max-width: 380px;
-            background-color: #202024;
+            background-color: #1a2333; /* Azul grisáceo oscuro */
             padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             text-align: center;
+            border: 1px solid #24324a;
         }
 
         /* Pantalla Activa */
@@ -44,14 +45,14 @@
             display: block;
         }
 
-        h1 { margin: 0 0 15px 0; color: #00b37e; font-size: 1.5rem; }
+        h1 { margin: 0 0 15px 0; color: #5c85d6; font-size: 1.5rem; } /* Azul melancólico */
 
         /* --- ESTILOS DEL METRÓNOMO --- */
-        .time-signature { margin-bottom: 15px; }
+        .time-signature { margin-bottom: 15px; color: #708090; }
         select, input[type="text"] {
-            background: #121214;
-            color: white;
-            border: 1px solid #29292e;
+            background: #0f141c;
+            color: #e6edf5;
+            border: 1px solid #24324a;
             padding: 10px;
             border-radius: 8px;
             font-size: 1rem;
@@ -64,8 +65,8 @@
             margin: 15px 0;
         }
         .btn-tempo {
-            background: #29292e;
-            color: white;
+            background: #24324a;
+            color: #b0c4de;
             border: none;
             width: 45px;
             height: 45px;
@@ -73,11 +74,12 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        .btn-tempo:active { background: #00b37e; }
-        .bpm-display { font-size: 4rem; font-weight: bold; color: #ffffff; min-width: 100px; }
-        .slider { width: 100%; margin: 15px 0; accent-color: #00b37e; }
+        .btn-tempo:active { background: #3b5998; }
+        .bpm-display { font-size: 4rem; font-weight: bold; color: #d2e1f0; min-width: 100px; }
+        .slider { width: 100%; margin: 15px 0; accent-color: #4a76a8; }
+        
         .btn-main {
-            background-color: #00b37e;
+            background-color: #3b5998; /* Azul apagado */
             color: white;
             border: none;
             padding: 15px;
@@ -87,18 +89,20 @@
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(59, 89, 152, 0.2);
         }
-        .btn-main.playing { background-color: #f75a68; }
+        .btn-main.playing { background-color: #5c6b73; } /* Gris plomizo al sonar */
+        
         .visualizer { display: flex; justify-content: center; gap: 8px; margin-top: 20px; height: 12px; }
-        .dot { width: 12px; height: 12px; background-color: #29292e; border-radius: 50%; transition: transform 0.1s; }
-        .dot.active { background-color: #00b37e; transform: scale(1.2); }
-        .dot.accent { background-color: #ffcd1e; }
+        .dot { width: 12px; height: 12px; background-color: #0f141c; border-radius: 50%; transition: transform 0.1s; }
+        .dot.active { background-color: #5c85d6; transform: scale(1.2); }
+        .dot.accent { background-color: #4a76a8; }
 
         /* --- ESTILOS DEL BUSCADOR --- */
         .search-box { display: flex; gap: 10px; margin-top: 15px; }
         .search-box input { flex: 1; }
         .btn-search {
-            background-color: #ff0000;
+            background-color: #2e4057; /* Azul grisáceo apagado */
             color: white;
             border: none;
             padding: 10px 15px;
@@ -111,15 +115,15 @@
 
         /* --- ESTILOS DE TEORÍA --- */
         .theory-card {
-            background: #121214;
+            background: #0f141c;
             padding: 15px;
             border-radius: 10px;
             text-align: left;
             margin-top: 15px;
-            border-left: 4px solid #00b37e;
+            border-left: 4px solid #4a76a8;
         }
-        .theory-card h3 { margin: 0 0 5px 0; color: #ffffff; font-size: 1.1rem; }
-        .theory-card p { margin: 0; color: #8b8b92; font-size: 0.9rem; }
+        .theory-card h3 { margin: 0 0 5px 0; color: #d2e1f0; font-size: 1.1rem; }
+        .theory-card p { margin: 0; color: #708090; font-size: 0.9rem; }
 
         /* --- BARRA DE NAVEGACIÓN FIJA ABAJO --- */
         .nav-bar {
@@ -128,8 +132,8 @@
             left: 0;
             right: 0;
             height: 65px;
-            background-color: #202024;
-            border-top: 1px solid #29292e;
+            background-color: #1a2333;
+            border-top: 1px solid #24324a;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -138,7 +142,7 @@
         .nav-item {
             background: none;
             border: none;
-            color: #8b8b92;
+            color: #5c6b73;
             font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
@@ -150,9 +154,8 @@
             height: 100%;
             justify-content: center;
         }
-        /* Estilo cuando la pestaña está seleccionada */
         .nav-item.active {
-            color: #00b37e;
+            color: #5c85d6; /* Azul destacado en la pestaña activa */
         }
         .nav-item icon {
             font-size: 1.2rem;
@@ -186,9 +189,9 @@
 
         <div id="screen-scores" class="screen">
             <h1>Buscador de Partituras</h1>
-            <p style="font-size: 0.9rem; color: #8b8b92; margin-bottom: 15px;">Filtra automáticamente videos con partitura visual.</p>
+            <p style="font-size: 0.9rem; color: #708090; margin-bottom: 15px;">Filtra automáticamente videos con partitura visual.</p>
             <div class="search-box">
-                <input type="text" id="searchQuery" placeholder="Ej: Mozart, Anime, Rock...">
+                <input type="text" id="searchQuery" placeholder="Ej: Chopin, Nocturne, Blues...">
                 <button class="btn-search" id="searchBtn">Buscar</button>
             </div>
             <div class="video-container" id="videoContainer">
@@ -198,7 +201,7 @@
 
         <div id="screen-theory" class="screen">
             <h1>Teoría Musical</h1>
-            <p style="font-size: 0.9rem; color: #8b8b92;">Tus apuntes de consulta rápida.</p>
+            <p style="font-size: 0.9rem; color: #708090;">Tus apuntes de consulta rápida.</p>
             
             <div class="theory-card">
                 <h3>El Compás de 4/4</h3>
@@ -210,7 +213,7 @@
                 <p>Significa "Beats Per Minute" (Pulsaciones por minuto). Cuanto más alto sea el número, más rápido irá la música.</p>
             </div>
             
-            <p style="font-size: 0.8rem; color: #55555d; margin-top: 20px;">Próximamente añadiremos escalas y acordes...</p>
+            <p style="font-size: 0.8rem; color: #4a5a73; margin-top: 20px;">Próximamente añadiremos escalas y acordes...</p>
         </div>
 
     </div>
@@ -231,16 +234,13 @@
     </nav>
 
     <script>
-        // --- SISTEMA DE PESTAÑAS (CAMBIO DE APARTADO) ---
+        // --- SISTEMA DE PESTAÑAS ---
         function switchTab(tabName) {
-            // Desactivar todas las pantallas y botones del menú
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             
-            // Activar la pantalla elegida y su botón correspondiente
             document.getElementById(`screen-${tabName}`).classList.add('active');
             
-            // Buscar cuál botón del menú se pulsó para marcarlo como verde
             const btnIndex = tabName === 'metronome' ? 0 : tabName === 'scores' ? 1 : 2;
             document.querySelectorAll('.nav-item')[btnIndex].classList.add('active');
         }
@@ -293,11 +293,11 @@
             let gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-            osc.frequency.value = isAccent ? 1200 : 800; 
-            gain.gain.setValueAtTime(isAccent ? 0.8 : 0.4, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc.frequency.value = isAccent ? 1100 : 750; // Tonos un pelín más graves y suaves
+            gain.gain.setValueAtTime(isAccent ? 0.7 : 0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + 0.04);
+            osc.stop(audioCtx.currentTime + 0.05);
         }
 
         function scheduler() {
